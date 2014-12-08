@@ -17,6 +17,8 @@ $RECYCLE.BIN/
 # =========================
 # Operating System Files
 # =========================
+*.exe
+*.gbap
 
 # OSX
 # =========================
@@ -41,5 +43,3 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-.exe
-.gbap
