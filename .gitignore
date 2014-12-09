@@ -45,3 +45,5 @@ Temporary Items
 .apdisk
 
 starbase_dev/starbase_dev.gbap
+*.gbap
+starbase_dev/starbase_dev.gbap
