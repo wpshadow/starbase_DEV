@@ -11,11 +11,80 @@ main()
 
 FUNCTION main:
 
-
+	init()
 
 	WHILE TRUE
-	
-	
+
+
 		SHOWSCREEN
 	WEND
+ENDFUNCTION
+
+FUNCTION init:
+
+	AUTOPAUSE FALSE
+	SYSTEMPOINTER TRUE
+		
+		
+		
+	SETSCREEN checkOptions(0), checkOptions(1), checkOptions(2)
+	
+ENDFUNCTION
+
+FUNCTION checkOptions: id
+STATIC ok, found
+STATIC resX, resY, full
+	
+	ok = DOESFILEEXIST("options.ini")
+	
+	// Initialisierung wird erzeugt
+	IF found  = FALSE
+	
+		IF ok = TRUE
+			resX = optionsFound(0)
+			resY = optionsFound(1)
+			full = optionsFound(2)
+		ENDIF
+		IF ok = FALSE
+			optionsNotFound()
+			resX = 1024
+			resY = 768
+			full = 0
+		ENDIF
+		
+		found = TRUE
+	
+	ENDIF
+	
+	
+	
+	// Initialisierung durchgeführt
+
+	IF id = 0 THEN RETURN resX
+	IF id = 1 THEN RETURN resY
+	IF id = 2 THEN RETURN full
+
+ENDFUNCTION
+
+FUNCTION optionsFound: id
+LOCAL info$
+	
+	INIOPEN "options.ini"
+		IF id = 0 THEN info$ = INIGET$("options", "resX")
+		IF id = 1 THEN info$ = INIGET$("options", "resY")
+		IF id = 2 THEN info$ = INIGET$("options", "full")
+		
+		RETURN info$
+	INIOPEN ""
+
+ENDFUNCTION
+
+FUNCTION optionsNotFound:
+
+	INIOPEN "options.ini"
+		INIPUT "options", "resX", "1024"
+		INIPUT "options", "resY", "768"
+		INIPUT "options", "full", "0"
+	INIOPEN ""
+
 ENDFUNCTION
