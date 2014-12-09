@@ -24,9 +24,7 @@ FUNCTION init:
 
 	AUTOPAUSE FALSE
 	SYSTEMPOINTER TRUE
-		
-		
-		
+	
 	SETSCREEN checkOptions(0), checkOptions(1), checkOptions(2)
 	
 ENDFUNCTION
@@ -53,13 +51,9 @@ STATIC resX, resY, full
 		ENDIF
 		
 		found = TRUE
-	
 	ENDIF
-	
-	
-	
-	// Initialisierung durchgeführt
 
+	// Initialisierung durchgeführt
 	IF id = 0 THEN RETURN resX
 	IF id = 1 THEN RETURN resY
 	IF id = 2 THEN RETURN full
