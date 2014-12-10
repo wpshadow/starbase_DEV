@@ -8,6 +8,11 @@
 TYPE optionsType
 	debugmodus
 	developermodus
+
+	loglevel_info
+	loglevel_warning
+	loglevel_critical
+	loglevel_error
 ENDTYPE
 
 GLOBAL options AS optionsType
@@ -15,8 +20,10 @@ GLOBAL options AS optionsType
 main()
 
 FUNCTION main:
-
+	
+	options.developermodus = TRUE
 	init()
+	writeLog("bla", 0)
 
 	WHILE TRUE
 
@@ -61,8 +68,31 @@ LOCAL ok
 				INIPUT "logging", "warning", "0"
 				INIPUT "logging", "critical", "0"
 				INIPUT "logging", "error", "1"
-			INIOPEN ""		
+			INIOPEN ""
+			
+			options.loglevel_info = 0
+			options.loglevel_warning = 0
+			options.loglevel_critical = 0
+			options.loglevel_error = 1			
+			
 		ENDIF
+	ENDIF
+
+ENDFUNCTION
+
+FUNCTION writeLog: info$, loglevel
+LOCAL filesize, date$, ok
+
+	date$ = MID$(PLATFORMINFO$("TIME"), 0, 10)
+	DEBUG date$ + "\n"
+
+	ok = DOESFILEEXIST("log" + date$ + ".txt")
+	
+	IF ok = FALSE
+	
+	ENDIF	
+	IF ok = TRUE
+		filesize = GETFILESIZE("log" + date$ + ".txt")
 	ENDIF
 	
 	
