@@ -28,8 +28,8 @@ FUNCTION init:
 
 	AUTOPAUSE FALSE
 	SYSTEMPOINTER TRUE
-
 	checkCommandline()
+	checkLogfile()
 	SETSCREEN checkOptions(0), checkOptions(1), checkOptions(2)
 
 ENDFUNCTION
@@ -44,6 +44,28 @@ LOCAL debuginfo$, count, spl$[]
 		IF spl$[1] = "debug" THEN options.debugmodus = TRUE
 		IF spl$[1] = "developermodus:123" THEN options.developermodus = TRUE
 	ENDIF
+
+ENDFUNCTION
+
+FUNCTION checkLogfile:
+LOCAL ok
+	
+	IF options.debugmodus = TRUE OR options.developermodus = TRUE
+		ok = DOESDIREXIST("log")
+		IF ok = FALSE THEN CREATEDIR("log")
+		
+		ok = DOESFILEEXIST("log/log.ini")
+		IF ok = FALSE
+			INIOPEN "log/log.ini"
+				INIPUT "logging", "info", "0"
+				INIPUT "logging", "warning", "0"
+				INIPUT "logging", "critical", "0"
+				INIPUT "logging", "error", "1"
+			INIOPEN ""		
+		ENDIF
+	ENDIF
+	
+	
 
 ENDFUNCTION
 
