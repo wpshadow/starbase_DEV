@@ -5,7 +5,11 @@
 
 
 // SETCURRENTDIR("Media") // go to media files
+TYPE optionsType
+	debugmodus
+ENDTYPE
 
+GLOBAL options AS optionsType
 
 main()
 
@@ -25,7 +29,22 @@ FUNCTION init:
 	AUTOPAUSE FALSE
 	SYSTEMPOINTER TRUE
 
+	checkCommandline()
 	SETSCREEN checkOptions(0), checkOptions(1), checkOptions(2)
+
+ENDFUNCTION
+
+FUNCTION checkCommandline:
+LOCAL debuginfo$, count, spl$[]
+	debuginfo$ = GETCOMMANDLINE$()
+
+	count = SPLITSTR(debuginfo$, spl$[], " -")
+	
+	IF count = 2
+		IF spl$[1] = "debug"
+			options.debugmodus = TRUE
+		ENDIF
+	ENDIF
 
 ENDFUNCTION
 
@@ -43,7 +62,7 @@ STATIC resX, resY, full
 			resX = optionsFound(0)
 			resY = optionsFound(1)
 			full = optionsFound(2)
-			
+
 			IF resX = -1 OR resY = -1 OR full = -1
 				KILLFILE "options.ini"
 				optionsNotFound()
@@ -51,8 +70,8 @@ STATIC resX, resY, full
 				resY = 768
 				full = 0
 			ENDIF
-			
-			
+
+
 		ENDIF
 		IF ok = FALSE
 			optionsNotFound()
