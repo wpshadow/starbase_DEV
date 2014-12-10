@@ -7,6 +7,7 @@
 // SETCURRENTDIR("Media") // go to media files
 TYPE optionsType
 	debugmodus
+	developermodus
 ENDTYPE
 
 GLOBAL options AS optionsType
@@ -18,7 +19,6 @@ FUNCTION main:
 	init()
 
 	WHILE TRUE
-
 
 		SHOWSCREEN
 	WEND
@@ -39,11 +39,10 @@ LOCAL debuginfo$, count, spl$[]
 	debuginfo$ = GETCOMMANDLINE$()
 
 	count = SPLITSTR(debuginfo$, spl$[], " -")
-	
+
 	IF count = 2
-		IF spl$[1] = "debug"
-			options.debugmodus = TRUE
-		ENDIF
+		IF spl$[1] = "debug" THEN options.debugmodus = TRUE
+		IF spl$[1] = "developermodus:123" THEN options.developermodus = TRUE
 	ENDIF
 
 ENDFUNCTION
