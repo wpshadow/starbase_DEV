@@ -20,7 +20,7 @@ GLOBAL options AS optionsType
 main()
 
 FUNCTION main:
-	
+
 	options.developermodus = TRUE
 	init()
 	writeLog("bla", 0)
@@ -56,46 +56,71 @@ ENDFUNCTION
 
 FUNCTION checkLogfile:
 LOCAL ok
-	
+
 	IF options.debugmodus = TRUE OR options.developermodus = TRUE
 		ok = DOESDIREXIST("log")
 		IF ok = FALSE THEN CREATEDIR("log")
-		
+
 		ok = DOESFILEEXIST("log/log.ini")
 		IF ok = FALSE
 			INIOPEN "log/log.ini"
-				INIPUT "logging", "info", "0"
-				INIPUT "logging", "warning", "0"
-				INIPUT "logging", "critical", "0"
-				INIPUT "logging", "error", "1"
+				IF options.debugmodus = TRUE
+					INIPUT "logging", "info", "0"
+					INIPUT "logging", "warning", "0"
+					INIPUT "logging", "critical", "0"
+					INIPUT "logging", "error", "1"
+				ENDIF
+				IF options.developermodus = TRUE
+					INIPUT "logging", "info", "0"
+					INIPUT "logging", "warning", "1"
+					INIPUT "logging", "critical", "1"
+					INIPUT "logging", "error", "1"
+				ENDIF
 			INIOPEN ""
+
+			IF options.debugmodus = TRUE
+				options.loglevel_info = 0
+				options.loglevel_warning = 0
+				options.loglevel_critical = 0
+				options.loglevel_error = 1
+			ENDIF
 			
-			options.loglevel_info = 0
-			options.loglevel_warning = 0
-			options.loglevel_critical = 0
-			options.loglevel_error = 1			
-			
+			IF options.developermodus = TRUE
+				options.loglevel_info = 0
+				options.loglevel_warning = 1
+				options.loglevel_critical = 1
+				options.loglevel_error = 1			
+			ENDIF
+		ENDIF
+		
+		IF ok = TRUE
+					
 		ENDIF
 	ENDIF
 
 ENDFUNCTION
 
 FUNCTION writeLog: info$, loglevel
-LOCAL filesize, date$, ok
+LOCAL date$, ok, entry$
 
 	date$ = MID$(PLATFORMINFO$("TIME"), 0, 10)
-	DEBUG date$ + "\n"
+	//DEBUG date$ + "\n"
 
-	ok = DOESFILEEXIST("log" + date$ + ".txt")
-	
+	ok = DOESFILEEXIST("log/log" + date$ + ".txt")
+
 	IF ok = FALSE
-	
-	ENDIF	
-	IF ok = TRUE
-		filesize = GETFILESIZE("log" + date$ + ".txt")
+		OPENFILE(0, "log/log" + date$ + ".txt", 0)
+			WRITELINE 0, date$
+		CLOSEFILE 0
 	ENDIF
-	
-	
+	IF ok = TRUE
+		OPENFILE(0, "log/log" + date$ + ".txt", 0)
+			entry$ = PLATFORMINFO$("TIME") + "|> " + info$
+			WRITELINE 0, entry$
+		CLOSEFILE 0
+	ENDIF
+
+
 
 ENDFUNCTION
 
