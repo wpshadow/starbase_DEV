@@ -24,7 +24,7 @@ FUNCTION main:
 	options.developermodus = TRUE
 	init()
 	writeLog("bla", 0)
-
+	
 	WHILE TRUE
 
 		SHOWSCREEN
@@ -84,17 +84,22 @@ LOCAL ok
 				options.loglevel_critical = 0
 				options.loglevel_error = 1
 			ENDIF
-			
+
 			IF options.developermodus = TRUE
 				options.loglevel_info = 0
 				options.loglevel_warning = 1
 				options.loglevel_critical = 1
-				options.loglevel_error = 1			
+				options.loglevel_error = 1
 			ENDIF
 		ENDIF
-		
+
 		IF ok = TRUE
-					
+			INIOPEN "log/log.ini"
+				options.loglevel_info = INIGET$("logging", "info")
+				options.loglevel_warning = INIGET$("logging", "warning")
+				options.loglevel_critical = INIGET$("logging", "critical")
+				options.loglevel_error = INIGET$("logging", "error")
+			INIOPEN ""
 		ENDIF
 	ENDIF
 
