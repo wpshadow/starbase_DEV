@@ -16,3 +16,29 @@
 2014-12-12 08:33:50|> INFO: read 768 from options.ini
 2014-12-12 08:33:50|> INFO: read 0 from options.ini
 2014-12-12 08:33:50|> CRITICAL: options.ini set with wrong settings. File deleted and created with default settings.
+2014-12-12 16:18:43|> INFO: options.ini found.
+2014-12-12 16:18:43|> INFO: read 1024 from options.ini
+2014-12-12 16:18:43|> INFO: read 768 from options.ini
+2014-12-12 16:18:43|> INFO: read 7 from options.ini
+2014-12-12 16:18:43|> CRITICAL: false fullscreen mode
+2014-12-12 16:24:00|> INFO: options.ini found.
+2014-12-12 16:24:00|> INFO: read 1024 from options.ini
+2014-12-12 16:24:00|> INFO: read 768 from options.ini
+2014-12-12 16:24:00|> INFO: read 7 from options.ini
+2014-12-12 16:24:00|> CRITICAL: false fullscreen mode
+2014-12-12 16:24:58|> INFO: options.ini found.
+2014-12-12 16:24:58|> INFO: read 1024 from options.ini
+2014-12-12 16:24:58|> INFO: read 768 from options.ini
+2014-12-12 16:24:58|> INFO: read 7 from options.ini
+2014-12-12 16:24:58|> CRITICAL: false fullscreen mode
+2014-12-12 16:25:51|> INFO: options.ini found.
+2014-12-12 16:25:51|> INFO: read 1024 from options.ini
+2014-12-12 16:25:51|> INFO: read 768 from options.ini
+2014-12-12 16:25:51|> INFO: read 7 from options.ini
+2014-12-12 16:25:51|> CRITICAL: false fullscreen mode
+2014-12-12 16:26:34|> INFO: options.ini found.
+2014-12-12 16:26:34|> INFO: read 1024 from options.ini
+2014-12-12 16:26:34|> INFO: read 768 from options.ini
+2014-12-12 16:26:34|> INFO: read 7 from options.ini
+2014-12-12 16:26:34|> CRITICAL: false fullscreen mode
+2014-12-12 16:26:34|> CRITICAL: options.ini set with wrong settings. File deleted and created with default settings.

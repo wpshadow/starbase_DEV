@@ -34,7 +34,7 @@ FUNCTION init: id
 	AUTOPAUSE FALSE
 	SYSTEMPOINTER TRUE
 	checkCommandline()
-	
+
 	SELECT id
 	CASE 1
 		options.debugmodus = TRUE
@@ -127,7 +127,7 @@ LOCAL date$, ok, entry$, writeTextInLog, level$
 			WRITELINE 0, date$
 		CLOSEFILE 0
 	ENDIF
-	
+
 	SELECT loglevel
 	CASE 0
 		IF options.loglevel_info = 1 THEN writeTextInLog = TRUE
@@ -142,7 +142,7 @@ LOCAL date$, ok, entry$, writeTextInLog, level$
 		IF options.loglevel_error = 1 THEN writeTextInLog = TRUE
 		level$ = "ERROR"
 	ENDSELECT
-	
+
 	IF ok = TRUE AND writeTextInLog = TRUE
 		OPENFILE(0, "log/log" + date$ + ".txt", -1)
 			entry$ = PLATFORMINFO$("TIME") + "|> " + level$ + ": " + info$
@@ -166,19 +166,23 @@ STATIC resX, resY, full
 
 		IF ok = TRUE
 			writeLog("options.ini found.", 0)
-			
+
 			resX = optionsFound(0)
 			resY = optionsFound(1)
 			full = optionsFound(2)
+			
+			IF resX = -1 OR resY = -1 OR full = -2
 
-			IF resX = -1 OR resY = -1 OR full = -1
+				IF resX = -1 OR resY = -1 THEN writeLog("options.ini set with wrong settings. File deleted and created with default settings.", 2)
+				IF full = -2 THEN writeLog("options.ini set with wrong settings. File deleted and created with default settings.", 2)
+				
 				KILLFILE "options.ini"
 				optionsNotFound()
 				resX = 1024
 				resY = 768
 				full = 0
-				
-				writeLog("options.ini set with wrong settings. File deleted and created with default settings.", 2)			
+
+
 			ENDIF
 
 		ENDIF
@@ -187,7 +191,7 @@ STATIC resX, resY, full
 			resX = 1024
 			resY = 768
 			full = 0
-			
+
 			writeLog("options.ini not found. File created.", 1)
 		ENDIF
 
@@ -205,7 +209,7 @@ FUNCTION optionsFound: id
 LOCAL info$, info, error$
 
 	INIOPEN "options.ini"
-	
+
 		IF id = 0 THEN info$ = INIGET$("options", "resX")
 		IF id = 1 THEN info$ = INIGET$("options", "resY")
 		IF id = 2 THEN info$ = INIGET$("options", "full")
@@ -215,10 +219,17 @@ LOCAL info$, info, error$
 		TRY
 			info = info$
 			IF MOD(info, 8) <> 0 AND id < 2 THEN THROW "not8"
+			IF id = 2
+				IF info < 0 OR info > 1
+					THROW "wrongwindowmode"
+				ENDIF
+			ENDIF
 		CATCH error$
 			IF error$ = "not8" THEN info$ = "-1"
-			
-			writeLog("not possible to divide value by 8: "+ info$, 2)
+			IF error$ = "wrongwindowmode" THEN info$ = "-2"
+
+			IF info$ = -1 THEN writeLog("not possible to divide value by 8: "+ info$, 2)
+			IF info$ = -2 THEN writeLog("false fullscreen mode", 2)
 		FINALLY
 
 		RETURN info$
