@@ -21,21 +21,26 @@ main()
 
 FUNCTION main:
 
-	options.developermodus = TRUE
-	init()
-	writeLog("bla", 0)
-	
+	init(2)
+
 	WHILE TRUE
 
 		SHOWSCREEN
 	WEND
 ENDFUNCTION
 
-FUNCTION init:
+FUNCTION init: id
 
 	AUTOPAUSE FALSE
 	SYSTEMPOINTER TRUE
 	checkCommandline()
+	
+	SELECT id
+	CASE 1
+		options.debugmodus = TRUE
+	CASE 2
+		options.developermodus = TRUE
+	ENDSELECT
 	checkLogfile()
 	SETSCREEN checkOptions(0), checkOptions(1), checkOptions(2)
 
@@ -103,10 +108,14 @@ LOCAL ok
 		ENDIF
 	ENDIF
 
+	DEBUG options.loglevel_info + "|" + options.loglevel_warning + "|" + options.loglevel_critical + "|" + options.loglevel_error
+
 ENDFUNCTION
 
 FUNCTION writeLog: info$, loglevel
-LOCAL date$, ok, entry$
+LOCAL date$, ok, entry$, writeTextInLog, level$
+
+	writeTextInLog = FALSE
 
 	date$ = MID$(PLATFORMINFO$("TIME"), 0, 10)
 	//DEBUG date$ + "\n"
@@ -114,13 +123,29 @@ LOCAL date$, ok, entry$
 	ok = DOESFILEEXIST("log/log" + date$ + ".txt")
 
 	IF ok = FALSE
-		OPENFILE(0, "log/log" + date$ + ".txt", 0)
+		OPENFILE(0, "log/log" + date$ + ".txt", -1)
 			WRITELINE 0, date$
 		CLOSEFILE 0
 	ENDIF
-	IF ok = TRUE
-		OPENFILE(0, "log/log" + date$ + ".txt", 0)
-			entry$ = PLATFORMINFO$("TIME") + "|> " + info$
+	
+	SELECT loglevel
+	CASE 0
+		IF options.loglevel_info = 1 THEN writeTextInLog = TRUE
+		level$ = "INFO"
+	CASE 1
+		IF options.loglevel_warning = 1 THEN writeTextInLog = TRUE
+		level$ = "WARNING"
+	CASE 2
+		IF options.loglevel_critical = 1 THEN writeTextInLog = TRUE
+		level$ = "CRITICAL"
+	CASE 3
+		IF options.loglevel_error = 1 THEN writeTextInLog = TRUE
+		level$ = "ERROR"
+	ENDSELECT
+	
+	IF ok = TRUE AND writeTextInLog = TRUE
+		OPENFILE(0, "log/log" + date$ + ".txt", -1)
+			entry$ = PLATFORMINFO$("TIME") + "|> " + level$ + ": " + info$
 			WRITELINE 0, entry$
 		CLOSEFILE 0
 	ENDIF
@@ -140,6 +165,8 @@ STATIC resX, resY, full
 	IF found  = FALSE
 
 		IF ok = TRUE
+			writeLog("options.ini found.", 0)
+			
 			resX = optionsFound(0)
 			resY = optionsFound(1)
 			full = optionsFound(2)
@@ -150,8 +177,9 @@ STATIC resX, resY, full
 				resX = 1024
 				resY = 768
 				full = 0
+				
+				writeLog("options.ini set with wrong settings. File deleted and created with default settings.", 2)			
 			ENDIF
-
 
 		ENDIF
 		IF ok = FALSE
@@ -159,6 +187,8 @@ STATIC resX, resY, full
 			resX = 1024
 			resY = 768
 			full = 0
+			
+			writeLog("options.ini not found. File created.", 1)
 		ENDIF
 
 		found = TRUE
@@ -175,15 +205,20 @@ FUNCTION optionsFound: id
 LOCAL info$, info, error$
 
 	INIOPEN "options.ini"
+	
 		IF id = 0 THEN info$ = INIGET$("options", "resX")
 		IF id = 1 THEN info$ = INIGET$("options", "resY")
 		IF id = 2 THEN info$ = INIGET$("options", "full")
 
+		writeLog("read " + info$ + " from options.ini", 0)
+
 		TRY
 			info = info$
-			IF MOD(info, 8) <> 0 THEN THROW "not8"
+			IF MOD(info, 8) <> 0 AND id < 2 THEN THROW "not8"
 		CATCH error$
 			IF error$ = "not8" THEN info$ = "-1"
+			
+			writeLog("not possible to divide value by 8: "+ info$, 2)
 		FINALLY
 
 		RETURN info$

@@ -1,1 +1,18 @@
-2014-12-12 07:23:09|> bla
+2014-12-12
+2014-12-12 07:58:37|> INFO: options.ini found.
+2014-12-12 07:59:01|> INFO: options.ini found.
+2014-12-12 07:59:21|> INFO: options.ini found.
+2014-12-12 08:05:45|> INFO: options.ini found.
+2014-12-12 08:05:45|> INFO: read 1024 from options.ini
+2014-12-12 08:05:45|> INFO: read 768 from options.ini
+2014-12-12 08:05:45|> INFO: read 0 from options.ini
+2014-12-12 08:33:22|> INFO: options.ini found.
+2014-12-12 08:33:22|> INFO: read 1023 from options.ini
+2014-12-12 08:33:22|> INFO: read 768 from options.ini
+2014-12-12 08:33:22|> INFO: read 0 from options.ini
+2014-12-12 08:33:50|> INFO: options.ini found.
+2014-12-12 08:33:50|> INFO: read 1023 from options.ini
+2014-12-12 08:33:50|> CRITICAL: not possible to divide value by 8: -1
+2014-12-12 08:33:50|> INFO: read 768 from options.ini
+2014-12-12 08:33:50|> INFO: read 0 from options.ini
+2014-12-12 08:33:50|> CRITICAL: options.ini set with wrong settings. File deleted and created with default settings.
